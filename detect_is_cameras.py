@@ -27,17 +27,19 @@ flags.DEFINE_string('classes', './data/coco.names', 'path to classes file')
 flags.DEFINE_string('weights', './checkpoints/yolov3.tf',
                     'path to weights file')
 flags.DEFINE_boolean('tiny', False, 'yolov3 or yolov3-tiny')
-flags.DEFINE_integer('size', 416, 'resize images to')
-flags.DEFINE_string('image', 'CameraGateway.2.Frame', 'path to input image')
+flags.DEFINE_integer('size', 608, 'resize images to')
+flags.DEFINE_string('camera', '1', 'camera id')
 flags.DEFINE_string('output', './output.jpg', 'path to output image')
 
 def main(_argv):
     # Connect to the broker
-    channel = Channel("ampq://guest:guest@10.10.2.2:30000")
-
+    broker = "ampq://guest:guest@10.10.2.1:30000"
+    channel = Channel(broker)
+    
     # Subscribe to the desired topic
     subscription = Subscription(channel)
-    subscription.subscribe(topic=FLAGS.image)
+    camera_id = "CameraGateway."+FLAGS.camera+".Frame"
+    subscription.subscribe(topic=camera_id)
     
     if FLAGS.tiny:
         yolo = YoloV3Tiny()
