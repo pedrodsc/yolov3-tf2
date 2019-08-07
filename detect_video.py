@@ -9,6 +9,10 @@ from yolov3_tf2.models import (
 from yolov3_tf2.dataset import transform_images
 from yolov3_tf2.utils import draw_outputs
 
+config = tf.compat.v1.ConfigProto()
+#config.gpu_options.per_process_gpu_memory_fraction = 0.8
+config.gpu_options.allow_growth = True
+sess = tf.compat.v1.Session(config=config)
 
 flags.DEFINE_string('classes', './data/coco.names', 'path to classes file')
 flags.DEFINE_string('weights', './checkpoints/yolov3.tf',

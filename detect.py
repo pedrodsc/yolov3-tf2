@@ -9,6 +9,11 @@ from yolov3_tf2.models import (
 )
 from yolov3_tf2.dataset import transform_images
 from yolov3_tf2.utils import draw_outputs
+from pprint import pprint
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.compat.v1.Session(config=config)
 
 flags.DEFINE_string('classes', './data/coco.names', 'path to classes file')
 flags.DEFINE_string('weights', './checkpoints/yolov3.tf',
@@ -32,9 +37,14 @@ def main(_argv):
     logging.info('classes loaded')
 
     img = tf.image.decode_image(open(FLAGS.image, 'rb').read(), channels=3)
+    pprint("----------------------decode_image-----------------------")
+    pprint(img)
     img = tf.expand_dims(img, 0)
+    pprint("----------------------expand_dims-----------------------")
+    pprint(img)
     img = transform_images(img, FLAGS.size)
-
+    pprint("----------------------transform_images-----------------------")
+    pprint(img)
     t1 = time.time()
     boxes, scores, classes, nums = yolo(img)
     t2 = time.time()
